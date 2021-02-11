@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Speak</title>
+    <style>
+      body {
+        background-color: blueviolet;
+      }
+      .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      #start {
+        position: fixed;
+        top:200px;
+        border-radius: 50%;
+        height: 100px;
+        width: 100px;
+        outline: none;
+        font-size: 22px;
+        background-color: gray;
+        border: 5px solid white;
+        color: white;
+        cursor: pointer;
+        transition: background-color 0.5s;
+        box-shadow: 8px 10px 8px black;
+      }
+      #start:hover {
+        background-color: black;
+      }
+      .message{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      #text {
+        position: relative;
+        top:80px;
+        color: white;
+        display: none;
+      }
+      #state{
+        position: relative;
+        top:70px;
+        color:white;
+        display:none;
+      }
+      .on{
+        border:5px solid white;
+        color:tomato;
+        background-color: white;
+
+      }
+      .off{
+        border:5px solid white;
+        color:white;
+        background-color:grey;
+
+      }
+    </style>
+  </head>
+  <body>
+
+    <div class="container">
+
+        <form action="/start/" method="post">
+            {%csrf_token%}
+      <button onclick="heading()"   id="start">Start</button>
+        </form>
+    </div>
+    <div class="message">
+      <h2 id="state">Speak State Name..</h2>
+        <h2  id="text">{{ans}}</h2>
+    </div>
+    <script>
+      var count=0;
+      document.getElementById('start').addEventListener('click',function(){
+        count+=1;
+          if (count%2==0){
+            document.getElementById('start').style.border='5px solid white';
+              document.getElementById('start').style.color='white';
+              document.getElementById('start').style.backgroundColor='grey';
+            document.getElementById('start').innerHTML='Start';
+          }
+          else{
+            document.getElementById('start').style.border='5px solid tomato';
+            document.getElementById('start').style.color='tomato';
+            document.getElementById('start').style.backgroundColor='white';
+            document.getElementById('start').innerHTML='Pause';
+
+          }
+
+      })
+
+      function heading(){
+        document.getElementById('state').style.display='block';
+        document.getElementById('text').style.display='none';
+
+
+      }
+      function heading1(){
+        document.getElementById('state').style.display='none';
+        document.getElementById('text').style.display='block';
+      }
+      const selectElement=document.querySelector('#text');
+      selectElement.addEventListener('change',(function(){speak();
+         heading1();})());
+
+      function speak(){
+        let msg = document.getElementById("text").innerText;
+        let speech = new SpeechSynthesisUtterance();
+
+        speech.lang = "en-US";
+        speech.text = msg;
+        speech.volume = 1;
+        speech.rate = 1;
+        speech.pitch = 1;
+        window.speechSynthesis.speak(speech);
+      }
+      function orginal() {
+        document.getElementById("start").style.height = "100px";
+        document.getElementById("start").style.width = "100px";
+
+      }
+      document.getElementById("start").addEventListener("click", function () {
+        document.getElementById("start").style.height = "96px";
+        document.getElementById("start").style.width = "96px";
+        setTimeout(orginal,86);
+      });
+    </script>
+  </body>
+</html>
